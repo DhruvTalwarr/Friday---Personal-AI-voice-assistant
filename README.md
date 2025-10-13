@@ -1,27 +1,62 @@
-# 🤖 Friday Voice Assistant
+🤖 Friday Voice Assistant
 
-Friday is a Python-based desktop voice assistant designed to handle common tasks such as web searching, playing media, fetching real-time weather, and setting non-blocking alarms. It is built to be modular, making it easy to extend and maintain.
+Friday is a modular, Python-based desktop voice assistant capable of performing everyday tasks such as web searches, playing media, fetching real-time weather updates, and setting non-blocking alarms.
+It’s designed with clean modular architecture — making it easy to extend, debug, and maintain.
 
-## 🚀 Getting Started
+🚀 Getting Started
+🧩 Prerequisites
 
-### Prerequisites
+Before you begin, make sure you have the following installed:
 
-1.  **Python 3.x:** Ensure you have a recent version of Python installed (Python 3.8+ is recommended).
-2.  **API Key:** A free API key from **OpenWeatherMap** is required for weather functionality. Replace the placeholder in `WeatherNow.py` with your key.
+Python 3.8 or higher
+You can verify your Python version using:
 
-### Installation
+python --version
 
-Install the required Python libraries using pip:
 
+OpenWeatherMap API Key
+
+Sign up at OpenWeatherMap
+ to get a free API key.
+
+Replace the placeholder key inside WeatherNow.py with your actual key:
+
+api_key = "YOUR_API_KEY"
+
+⚙️ Installation
+
+Clone this repository and install the dependencies:
+
+git clone https://github.com/yourusername/friday-voice-assistant.git
+cd friday-voice-assistant
 pip install pyttsx3 SpeechRecognition requests pywhatkit wikipedia playsound
 
+▶️ Running the Assistant
 
-**Running the Assistant**
-Execute the main script from your terminal:
+Once everything is set up, run the main file:
 
 python friday_main.py
 
-The assistant will initialize (Friday activated.) and wait for your command.
+
+When started successfully, Friday will greet you and display:
+
+Friday activated. Waiting for your command...
+
+
+You can now start interacting with Friday using your voice commands. 🎤
+
+💡 Example Commands
+
+“What’s the weather like today?”
+
+“Search Python programming on Google.”
+
+“Play music on YouTube.”
+
+“Set an alarm for 7 AM.”
+
+“Who is Elon Musk?”
+
 
 | **File Name**            | **Type**              | **Description**                                                                                                                                                          |
 | ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
