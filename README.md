@@ -1,79 +1,115 @@
-🤖 Friday Voice Assistant
+# 🤖 Friday: Your Personal AI Desktop Assistant
 
-Friday is a modular, Python-based desktop voice assistant capable of performing everyday tasks such as web searches, playing media, fetching real-time weather updates, and setting non-blocking alarms.
-It’s designed with clean modular architecture — making it easy to extend, debug, and maintain.
+Project Friday is a comprehensive, voice-controlled desktop assistant built primarily in Python. It automates daily tasks, manages focus time, provides real-time information, and offers interactive utilities—all through simple voice commands.
 
-🚀 Getting Started
-🧩 Prerequisites
+---
 
-Before you begin, make sure you have the following installed:
+## ✨ Features
 
-Python 3.8 or higher
-You can verify your Python version using:
+Friday is engineered to be a powerful, multi-functional helper covering utility, communication, information retrieval, and productivity.
 
-python --version
+- **🎙️ Voice Control & Communication:** Full text-to-speech (pyttsx3) and command recognition for a hands-free experience.
+- **⏰ Task & Time Management:** Set alarms, manage a task list, and schedule dedicated focus sessions.
+- **🌐 Real-Time Information:** Check live weather, news headlines, cricket scores, and measure internet speed instantly.
+- **🔍 Automated Searching:** Quickly perform searches on Google, YouTube, and Wikipedia.
+- **💬 Utilities:** Automated WhatsApp messaging, real-time language translation, and a built-in calculator.
+- **💾 Persistent Memory:** Save notes, passwords, and task lists locally for long-term usage.
 
+---
 
-OpenWeatherMap API Key
+## 🚀 Getting Started
 
-Sign up at OpenWeatherMap
- to get a free API key.
+These instructions will help you set up Project Friday on your local machine for development and testing.
 
-Replace the placeholder key inside WeatherNow.py with your actual key:
+### Prerequisites
 
-api_key = "YOUR_API_KEY"
+- Python 3.x installed on your system.
+- System-level dependencies for `pyttsx3` (PortAudio or audio playback libraries).
 
-⚙️ Installation
+### Installation
 
-Clone this repository and install the dependencies:
+1. **Clone the Repository:**
+   ```bash
+   git clone https://github.com/YourUsername/Project-Friday.git
+   cd Project-Friday
 
-git clone https://github.com/yourusername/friday-voice-assistant.git
-cd friday-voice-assistant
-pip install pyttsx3 SpeechRecognition requests pywhatkit wikipedia playsound
+2. **Install Dependencies**:
 
-▶️ Running the Assistant
+pip install -r requirements.txt
 
-Once everything is set up, run the main file:
+3. **Setup Configuration**:
 
-python friday_main.py
+Many modules (e.g., WeatherNow.py, translate.py) require API keys (OpenWeatherMap, Google Translate, etc.).
 
+Update credential files:
 
-When started successfully, Friday will greet you and display:
+password → securely store login tokens or keys.
 
-Friday activated. Waiting for your command...
-
-
-You can now start interacting with Friday using your voice commands. 🎤
-
-💡 Example Commands
-
-“What’s the weather like today?”
-
-“Search Python programming on Google.”
-
-“Play music on YouTube.”
-
-“Set an alarm for 7 AM.”
-
-“Who is Elon Musk?”
+AlarmText, AlarmTime, remember, task → set up initial data.
 
 
-| **File Name**            | **Type**              | **Description**                                                                                                                                                          |
-| ------------------------ | --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| `friday_main.py`         | 🧠 **Main File**      | The core execution file. It initializes the speech engine, runs the main listening loop, and manages the logic flow between commands and modules.                        |
-| `AlarmSet.py`            | ⏰ **Module**          | Contains the logic for setting a non-blocking alarm. It prompts the user for a time, calculates the delay, and plays `soft_morning_alarm.mp3` using a background thread. |
-| `WeatherNow.py`          | 🌦️ **Module**        | Handles real-time weather and temperature queries. It constructs the API call to OpenWeatherMap and processes the JSON response.                                         |
-| `SearchNow.py`           | 🌐 **Module**         | Handles external searches (Google, YouTube, Wikipedia). It uses `pywhatkit`, `webbrowser`, and the `wikipedia` library to perform actions and fetch summaries.           |
-| `GreetMe.py`             | 👋 **Module**         | Contains the function to greet the user based on the current time of day (e.g., Good Morning, Good Evening).                                                             |
-| `soft_morning_alarm.mp3` | 🎵 **Audio File**     | The sound file played when the alarm set via `AlarmSet.py` is triggered.                                                                                                 |
-| `Dictapp.py`             | 📘 **Python Source**  | Likely a custom module for dictionary/definition lookups or basic dictation/typing tasks.                                                                                |
-| `keyboard.py`            | ⌨️ **Python Source**  | Likely contains functions for simulating key presses or desktop automation, possibly used for system control or hotkeys.                                                 |
-| `__pycache__/`           | ⚙️ **Folder**         | Temporary Python cache folder. Generated automatically by Python for faster module loading.                                                                              |
-| `Alarmtext.txt`          | 📝 **Text Document**  | A configuration or temporary file related to initial alarm testing.                                                                                                      |
-| `AlarmTime.py`           | 🧩 **Python Source**  | A temporary or older version of the logic now fully integrated into `AlarmSet.py`.                                                                                       |
-| `alarm_temp.py`          | 🧪 **Python Source**  | Test file used for initial alarm development.                                                                                                                            |
-| `test_voice_temp.py`     | 🎙️ **Python Source** | Temporary test file used for checking voice input/output configurations.                                                                                                 |
-| `voices_temp.py`         | 🗣️ **Python Source** | Temporary test file used for configuring and selecting the correct `pyttsx3` voice.                                                                                      |
-| `remember.txt`           | 💾 **Text Document**  | Temporary file possibly used to test persistent memory or to "remember" specific user data.                                                                              |
-| `installer.py`           | ⚡ **Python Source**   | Temporary script used to install or manage project dependencies.                                                                                                         |
+## 📂 Module Breakdown
+
+### 1. Core Logic & Setup
+
+| File / Module   | Description |
+|-----------------|-------------|
+| `friday_main.py` | Central command loop: initializes systems, handles voice input, maps commands, and manages workflow. |
+| `installer`     | Utility for setting up environment or dependencies. |
+| `speaker.py`    | Handles Text-to-Speech (TTS) using `pyttsx3`. |
+| `GreetMe.py`    | Executes time-based, personalized voice greetings. |
+| `Intro.py`      | Plays animated startup GIF (`dr strange.gif`) on launch. |
+
+---
+
+### 2. Information Retrieval
+
+| File / Module           | Description |
+|-------------------------|-------------|
+| `SearchNow.py`          | Automates and speaks results from Google, YouTube, and Wikipedia searches. |
+| `WeatherNow.py`         | Fetches and reports live weather updates via API. |
+| `News.py`               | Retrieves and reads latest news headlines. |
+| `live_cricket_score.py` | Fetches and reports live cricket match scores. |
+| `test_speed.py`         | Measures and reports internet upload/download speed. |
+
+---
+
+### 3. Productivity & Utilities
+
+| File / Module  | Description |
+|----------------|-------------|
+| `FocusMode.py`    | Starts a distraction-free focus session with timer. |
+| `FocusGraph.py`   | Generates visual graphs of focus session performance. |
+| `AlarmSet.py`     | Schedules and manages multiple alarms. |
+| `Whatsapp.py`     | Sends automated WhatsApp messages (`pywhatkit` required). |
+| `translate.py`    | Performs real-time text translations via API. |
+| `keyboard.py`     | Handles input automation (volume control, shortcuts, screenshots). |
+| `calulator`       | Simple module for mathematical calculations. |
+
+---
+
+### 4. Data & Assets
+
+| File / Module                     | Purpose |
+|-----------------------------------|---------|
+| `requirements.txt`                | Lists all required Python libraries (requests, pyttsx3, speedtest). |
+| `remember`                        | Stores assistant's long-term memory (notes, facts, preferences). |
+| `task`                            | Manages user's to-do list or tasks. |
+| `password`                         | Stores API keys and sensitive credentials (secure file permissions recommended). |
+| `PyWhatKit_DB`                     | Database/log for WhatsApp message history or config. |
+| `dr strange.gif`                   | Animation played on startup. |
+| `soft_morning_alarm.mp3`           | Alarm sound file. |
+| `dr strange-magic-circle-shield-sound.mp3` | Launch/activation sound effect. |
+
+5. Development & Temporary Files
+   
+Temporary files used for testing/development:
+
+alarm_temp.py, calc_module_temp.py, test_voice_temp.py, voices_temp.py
+
+AlarmText, AlarmTime (temp configuration storage)
+
+screenshot.png (example screenshot)
+
+These files can generally be ignored for production or version control.
 
