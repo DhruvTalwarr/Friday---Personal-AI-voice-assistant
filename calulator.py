@@ -16,7 +16,7 @@ def speak(audio):
     del engine 
 
 def WolframAlpha(query):
-    api_key = "29GG6A9GVP"
+    api_key = "YOUR_API_KEY"
     requester = wolframalpha.Client(api_key)
     requested = requester.query(query)
 
@@ -41,4 +41,5 @@ def Calc(query):
         print(f"{result}")
         speak(result)
     except:
+
         speak("I am sorry sir, I am not able to calculate this")
