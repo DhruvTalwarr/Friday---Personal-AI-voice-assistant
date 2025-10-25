@@ -1,19 +1,13 @@
 import pyttsx3
-import time
 
-# Initialize the engine once
-engine = pyttsx3.init("sapi5")
-voices = engine.getProperty("voices")
+engine = pyttsx3.init('sapi5')
+voices = engine.getProperty('voices')
+print("Available voices:")
+for i, v in enumerate(voices):
+    print(i, v.name)
 
-# Set voice to index 2 (or try index 0 for a simple test)
-engine.setProperty("voice", voices[2].id) 
-engine.setProperty("rate", 170)
-
-# Speak a test phrase
-print("Attempting to speak test phrase...")
-engine.say("Hello. I am speaking without the microphone enabled.")
+engine.setProperty('voice', voices[2].id)
+engine.setProperty('rate', 170)
+engine.setProperty('volume', 1.0)
+engine.say("Hello, this is a test for Friday's voice system.")
 engine.runAndWait()
-
-# Clean up
-engine.stop()
-print("Speech attempt complete.")

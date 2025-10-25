@@ -1,7 +1,7 @@
 import requests
 
 # --- API CONFIGURATION ---
-API_KEY = "YOUR_API_KEY" 
+API_KEY = "35e4afc4ee31a5903eff497df13d828b" 
 BASE_URL = "http://api.openweathermap.org/data/2.5/weather?"
 CITY_NAME = "Kanpur,IN" 
 
@@ -28,5 +28,4 @@ def get_weather_data(query, speak):
     except requests.exceptions.RequestException:
         speak("I'm sorry sir, I can't connect to the weather service right now.")
     except KeyError:
-
         speak("I retrieved the data, sir, but it seems to be in an unexpected format.")

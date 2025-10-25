@@ -5,7 +5,7 @@ import pyttsx3
 from time import sleep
 
 def speak(audio):
-    print("=====Friday not activated yet=====\n")
+    # print("=====Friday not activated yet=====\n")
     engine = pyttsx3.init("sapi5")
     voices = engine.getProperty("voices")
     engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
