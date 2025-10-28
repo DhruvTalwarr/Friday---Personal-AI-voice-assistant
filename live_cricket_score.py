@@ -1,75 +1,71 @@
 import requests
-from bs4 import BeautifulSoup
 from plyer import notification
 
-def get_live_matches():
-    """
-    Fetch all live matches from Cricbuzz.
-    Returns a list of tuples: (match_title, match_url)
-    """
-    url = "https://www.cricbuzz.com/cricket-match/live-scores"
-    page = requests.get(url)
-    soup = BeautifulSoup(page.text, 'html.parser')
+# ----------------- RapidAPI Cricbuzz Setup -----------------
+RAPIDAPI_KEY = "95c23fbc7dmshf88abc9a4a47036p132b8djsnc87c9b147091"
+RAPIDAPI_HOST = "cricbuzz-cricket.p.rapidapi.com"
+MATCHES_URL = "https://cricbuzz-cricket.p.rapidapi.com/matches/v1/recent"
 
-    matches = soup.find_all('a', class_="text-hvr-underline")
-    live_matches = []
+HEADERS = {
+    "X-RapidAPI-Key": RAPIDAPI_KEY,
+    "X-RapidAPI-Host": RAPIDAPI_HOST
+}
 
-    for match in matches:
-        title = match.get_text(strip=True)
-        href = match['href']
-        if "cricket-match" in href:
-            live_matches.append((title, "https://www.cricbuzz.com" + href))
+# ----------------- Cricbuzz Functions -----------------
+def get_recent_matches():
+    """Fetch live/recent matches from Cricbuzz API."""
+    try:
+        response = requests.get(MATCHES_URL, headers=HEADERS)
+        response.raise_for_status()
+        data = response.json()
+        matches = []
 
-    return live_matches
+        for match_type in data.get("typeMatches", []):
+            for series in match_type.get("seriesMatches", []):
+                for m in series.get("seriesAdWrapper", {}).get("matches", []):
+                    match_info = m.get("matchInfo", {})
+                    match_id = match_info.get("matchId")
+                    team1 = match_info.get("team1", {}).get("teamName", "")
+                    team2 = match_info.get("team2", {}).get("teamName", "")
+                    status = match_info.get("status", "")
+                    title = f"{team1} vs {team2}"
+                    matches.append({
+                        "id": match_id,
+                        "title": title,
+                        "status": status
+                    })
+        return matches
+    except Exception as e:
+        print(f"Error fetching matches: {e}")
+        return []
 
-def fetch_score(match_url):
-    """
-    Fetch scoreboard of a match from its URL.
-    Returns a list of strings for each team’s score.
-    """
-    page = requests.get(match_url)
-    soup = BeautifulSoup(page.text, 'html.parser')
-
-    scoreboard = soup.select(".cb-scrs-wrp")
-    result = []
-
-    if not scoreboard:
-        return ["Could not fetch scores for this match."]
-
-    for s in scoreboard:
-        team_name = s.select_one(".cb-scrs-wrp .text-bold")
-        score = s.select_one(".cb-scrs")
-        if team_name and score:
-            result.append(f"{team_name.get_text(strip=True)} : {score.get_text(strip=True)}")
-    return result
-
+# ----------------- Interactive Function -----------------
 def live_cricket_score_interactive():
-    """
-    Interactive mode to show live matches and fetch score based on user choice.
-    """
-    live_matches = get_live_matches()
+    """Interactive function to fetch match summaries."""
+    matches = get_recent_matches()
 
-    if not live_matches:
-        print("No live matches currently.")
+    if not matches:
+        print("No live or recent matches found.")
         return
 
-    print("Live Matches:")
-    for idx, (title, _) in enumerate(live_matches):
-        print(f"{idx+1}. {title}")
+    print("\n📋 Available Matches:\n")
+    for idx, match in enumerate(matches):
+        print(f"{idx + 1}. {match['title']} ({match['status']})")
 
-    choice = int(input("Enter the match number you want the score for: ")) - 1
-    if 0 <= choice < len(live_matches):
-        _, match_url = live_matches[choice]
-        scoreboard = fetch_score(match_url)
-        print("\nScoreboard:")
-        for line in scoreboard:
-            print(line)
+    try:
+        choice = int(input("\nEnter the match number to get the summary: ")) - 1
+        if 0 <= choice < len(matches):
+            selected = matches[choice]
+            summary = f"{selected['title']}\nStatus: {selected['status']}"
+            print(f"\n📌 Match Summary:\n{summary}")
 
-        # Optional notification
-        notification.notify(
-            title="Live Cricket Score",
-            message="\n".join(scoreboard),
-            timeout=15
-        )
-    else:
-        print("Invalid choice.")
+            # Desktop notification
+            notification.notify(
+                title="🏏 Cricket Match Summary",
+                message=summary,
+                timeout=15
+            )
+        else:
+            print("Invalid choice.")
+    except Exception as e:
+        print(f"Error: {e}")

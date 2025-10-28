@@ -1,45 +1,70 @@
+
 import wolframalpha
 import pyttsx3
-import speech_recognition as sr
+from speak import speak, stop_speaking
 
-def speak(audio):
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
-    engine.setProperty("rate", 170)
-    print(f"Friday: {audio}") 
-    engine.say(audio)
-    engine.runAndWait()
-    
-    # VERY IMPORTANT: Stop/Quit the engine to free up the SAPI resource
-    engine.stop() 
-    del engine 
+# def speak(audio):
+#     engine = pyttsx3.init("sapi5")
+#     voices = engine.getProperty("voices")
+#     engine.setProperty("voice", voices[2].id)  # Change index if needed
+#     engine.setProperty("rate", 170)
+#     print(f"Friday: {audio}")
+#     engine.say(audio)
+#     engine.runAndWait()
+#     engine.stop()
+
 
 def WolframAlpha(query):
-    api_key = "YOUR_API_KEY"
-    requester = wolframalpha.Client(api_key)
-    requested = requester.query(query)
-
+    api_key = "93KA8A8Q27"  # Your App ID
     try:
+        requester = wolframalpha.Client(api_key)
+        requested = requester.query(query)
         answer = next(requested.results).text
         return answer
-    except:
-        speak("I am sorry sir, I am not able to find the answer for this question")
+    except StopIteration:
+        return None
+    except Exception as e:
+        print(f"[Error: WolframAlpha failed] {e}")
+        return None
+
 
 def Calc(query):
-    term = str(query)
-    term = term.replace("calculate", "")
-    term = term.replace("friday", "")
-    term = term.replace("multiply", "*")
-    term = term.replace("plus", "+")
-    term = term.replace("minus", "-")
-    term = term.replace("divide", "/")
+    """Perform calculation using WolframAlpha, fallback to local eval."""
+    term = str(query).lower()
 
-    final = str(term)
-    try:
-        result = WolframAlpha(final)
-        print(f"{result}")
-        speak(result)
-    except:
+    # Clean up query text
+    replacements = {
+        "calculate": "",
+        "friday": "",
+        "plus": "+",
+        "minus": "-",
+        "divide": "/",
+        "divided by": "/",
+        "multiply": "*",
+        "multiplied by": "*",
+        "x": "*",
+        "into": "*",
+        "power": "**"
+    }
+    for word, sym in replacements.items():
+        term = term.replace(word, sym)
 
-        speak("I am sorry sir, I am not able to calculate this")
+    final = term.strip()
+    print(f"[DEBUG] Calculating: {final}")
+
+    # Try WolframAlpha first
+    result = WolframAlpha(final)
+
+    if not result:
+        # Fallback to local Python eval for basic math
+        try:
+            result = str(eval(final))
+        except Exception as e:
+            print(f"[Error: Local eval failed] {e}")
+            result = None
+
+    if result:
+        print(f"Result: {result}")
+        speak(f"The answer is {result}")
+    else:
+        speak("I am sorry sir, I am not able to calculate this.")

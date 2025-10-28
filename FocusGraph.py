@@ -1,22 +1,20 @@
 import matplotlib.pyplot as pt
 
 def focus_graph():
-    file = open("focus.txt","r")
-    content = file.read()
-    file.close()
+    with open("focus.txt", "r") as file:
+        content = file.read().strip()   # remove extra spaces/newlines
 
     content = content.split(",")
-    x1 = []
-    for i in range(0,len(content)):
-        content[i] = float(content[i])
-        x1.append(i)
+    # filter out empty strings
+    content = [float(i) for i in content if i.strip() != ""]
 
-    print(content)
+    x1 = list(range(len(content)))
     y1 = content
 
-    pt.plot(x1,y1,color = "red",marker = "o")
-    pt.title("YOUR FOCUSED TIME",fontsize = 16)
-    pt.xlabel("Times",fontsize = 14)
-    pt.ylabel("Focus Time", fontsize = 14)
-    pt.grid()
+    print(content)
+    pt.plot(x1, y1, color="red", marker="o")
+    pt.title("YOUR FOCUSED TIME", fontsize=16)
+    pt.xlabel("Sessions", fontsize=14)
+    pt.ylabel("Focus Duration (hours)", fontsize=14)
+    pt.grid(True)
     pt.show()

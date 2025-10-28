@@ -1,20 +1,21 @@
 import pyttsx3
 import speech_recognition 
 import random
+from speak import speak, stop_speaking
 
-def speak(audio):
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
-    engine.setProperty('volume', 2.0)
-    engine.setProperty("rate", 170)
-    print(f"Friday: {audio}") 
-    engine.say(audio)
-    engine.runAndWait()
+# def speak(audio):
+#     engine = pyttsx3.init("sapi5")
+#     voices = engine.getProperty("voices")
+#     engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
+#     engine.setProperty('volume', 2.0)
+#     engine.setProperty("rate", 170)
+#     print(f"Friday: {audio}") 
+#     engine.say(audio)
+#     engine.runAndWait()
     
-    # VERY IMPORTANT: Stop/Quit the engine to free up the SAPI resource
-    engine.stop() 
-    del engine 
+#     # VERY IMPORTANT: Stop/Quit the engine to free up the SAPI resource
+#     engine.stop() 
+#     del engine 
     
     # print("---Task Completed---\n") 
 

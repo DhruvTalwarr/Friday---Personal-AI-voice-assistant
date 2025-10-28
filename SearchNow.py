@@ -21,15 +21,17 @@ def takeCommand():
         return "None"
     return query
 
-
-engine = pyttsx3.init("sapi5")
-voices = engine.getProperty("voices")
-engine.setProperty("voice", voices[2].id) 
+from speak import speak, stop_speaking
 
 
-def speak(audio):
-    engine.say(audio)
-    engine.runAndWait()
+# engine = pyttsx3.init("sapi5")
+# voices = engine.getProperty("voices")
+# engine.setProperty("voice", voices[2].id) 
+
+
+# def speak(audio):
+#     engine.say(audio)
+#     engine.runAndWait()
 
 def searchGoogle(query):
     if "google" in query:        

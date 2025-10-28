@@ -1,36 +1,26 @@
 import pyttsx3
 from googletrans import Translator, LANGUAGES
+from speak import speak, stop_speaking
 
-def speak(text):
-    """Speak text using pyttsx3."""
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id)  # adjust index if needed
-    engine.setProperty("rate", 170)
-    engine.setProperty("volume", 2.0)
-    print(f"Friday: {text}")
-    engine.say(text)
-    engine.runAndWait()
-    engine.stop()
 
 def translategl(query):
-    """Translate text and speak it using pyttsx3."""
-    speak("Sure sir")
+    """Translate spoken text and read the translation aloud."""
+    speak("Sure sir. Let's translate it.")
     translator = Translator()
 
-    # Print all languages with codes for easy selection
+    # Show all languages (for terminal users)
     print("\nAvailable Languages:\n")
     for code, name in LANGUAGES.items():
         print(f"{code} : {name}")
-    print("\n")  # extra line for clarity
+    print("\n")
 
-    speak("Choose the language in which you want to translate")
+    speak("Please tell me or type the language you want to translate into.")
     b = input("To_Lang (code or name) :- ").lower()
 
-    # Find language code
+    # Find the correct language code
     lang_code = None
     for code, name in LANGUAGES.items():
-        if name.lower() == b or code.lower() == b:
+        if b == code.lower() or b == name.lower():
             lang_code = code
             break
 
@@ -38,13 +28,15 @@ def translategl(query):
         speak("Sorry sir, this language is not supported.")
         return
 
-    # Translate
     try:
-        text_to_translate = translator.translate(query, src="auto", dest=lang_code)
-        translated_text = text_to_translate.text
+        # Perform translation
+        translated = translator.translate(query, src="auto", dest=lang_code)
+        translated_text = translated.text
+
         print(f"\nTranslated Text ({lang_code} - {LANGUAGES[lang_code]}): {translated_text}\n")
-        speak("Here is the translated version")
+        speak(f"Here is the translation in {LANGUAGES[lang_code]}.")
         speak(translated_text)
+
     except Exception as e:
         print(f"Error: {e}")
-        speak("Unable to translate")
+        speak("Sorry sir, I was unable to translate that.")

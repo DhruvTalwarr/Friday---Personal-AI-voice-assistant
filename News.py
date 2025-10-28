@@ -2,24 +2,25 @@ import requests
 import json
 import pyttsx3
 import time 
+from speak import speak, stop_speaking
 
 # --- NEWS DATA IO CONFIGURATION ---
-NEWS_API_KEY = "YOUR_API_KEY" 
+NEWS_API_KEY = "pub_5bbf13476c3a4bcf9ce516671f64cd65" 
 # NewsData.io 'latest' endpoint is generally reliable for top stories
 NEWS_BASE_URL = "https://newsdata.io/api/1/latest?" 
 COUNTRY_CODE = "in" # Filter for India
 # ----------------------------------
 
-def speak(audio):
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id) 
-    engine.setProperty("rate", 170)
-    print(f"Friday: {audio}") 
-    engine.say(audio)
-    engine.runAndWait()
-    engine.stop() 
-    del engine 
+# def speak(audio):
+#     engine = pyttsx3.init("sapi5")
+#     voices = engine.getProperty("voices")
+#     engine.setProperty("voice", voices[2].id) 
+#     engine.setProperty("rate", 170)
+#     print(f"Friday: {audio}") 
+#     engine.say(audio)
+#     engine.runAndWait()
+#     engine.stop() 
+#     del engine 
 
 def latestNews(speak_func):
     
@@ -87,5 +88,4 @@ def latestNews(speak_func):
         print(f"News API Connection Error: {e}")
     except Exception as e:
         speak_func("An unexpected error occurred while processing the news.")
-
         print(f"General News Error: {e}")

@@ -1,64 +1,46 @@
 import time
 import datetime
-import ctypes
-import sys
-def is_admin():
-    try:
-        return ctypes.windll.shell32.IsUserAnAdmin()
-    except:
-        return False
-if is_admin():
-    current_time = datetime.datetime.now().strftime("%H:%M")
-    Stop_time = input("Enter time example:- [10:10]:- ")
-    a = current_time.replace(":",".")
-    a = float(a)
-    b = Stop_time.replace(":",".")
-    b = float(b)
-    Focus_Time = b-a
-    Focus_Time = round(Focus_Time,3)
-    host_path ='C:\Windows\System32\drivers\etc\hosts'
-    redirect = '127.0.0.1'
+import os
 
-    
-    print(current_time)
-    time.sleep(2)
-    website_list = ["www.facebook.com","facebook.com"] #Enter the websites that you want to block 
-    if (current_time < Stop_time):
-        with open(host_path,"r+") as file: #r+ is writing+ reading
-            content = file.read()
-            time.sleep(2)
-            for website in website_list:    
-                if website in content:
-                    pass
-                else:
-                    file.write(f"{redirect} {website}\n")
-                    print("DONE")
-                    time.sleep(1)
-            print("FOCUS MODE TURNED ON !!!!")
+current_time = datetime.datetime.now().strftime("%H:%M")
+stop_time = input("Enter stop time (e.g. 10:10): ")
 
+a = float(current_time.replace(":", "."))
+b = float(stop_time.replace(":", "."))
+focus_duration = round(b - a, 3)
 
-    while True:     
-        
-        current_time = datetime.datetime.now().strftime("%H:%M")
-        website_list = ["www.facebook.com","facebook.com"]    #Enter the websites that you want to block 
-        if (current_time >= Stop_time):
-            with open(host_path,"r+") as file:
-                content = file.readlines()
-                file.seek(0)
+host_path = r"C:\Windows\System32\drivers\etc\hosts"
+redirect = "127.0.0.1"
+website_list = ["www.facebook.com", "facebook.com"]
 
-                for line in content:
-                    if not any(website in line for website in website_list):
-                        file.write(line)
+print(f"Current time: {current_time}")
+print("Blocking websites...")
 
-                file.truncate()
+# Block sites
+with open(host_path, "r+") as file:
+    content = file.read()
+    for website in website_list:
+        if website not in content:
+            file.write(f"{redirect} {website}\n")
+            print(f"Blocked: {website}")
 
-                print("Websites are unblocked !!")
-                file = open("focus.txt","a")
-                file.write(f",{Focus_Time}")        #Write a 0 in focus.txt before starting
-                file.close()
-                break 
+print("✅ Focus Mode ON!")
 
-else:
-    ctypes.windll.shell32.ShellExecuteW(None, "runas", sys.executable, " ".join(sys.argv), None, 1)
+# Wait until stop time
+while True:
+    now = datetime.datetime.now().strftime("%H:%M")
+    if now >= stop_time:
+        with open(host_path, "r+") as file:
+            lines = file.readlines()
+            file.seek(0)
+            for line in lines:
+                if not any(website in line for website in website_list):
+                    file.write(line)
+            file.truncate()
+        print("🟢 Websites unblocked!")
+        with open("focus.txt", "a") as f:
+            f.write(f",{focus_duration}")
+        break
 
-is_admin()
+    time.sleep(30)
+

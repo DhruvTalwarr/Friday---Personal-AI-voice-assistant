@@ -9,19 +9,20 @@ import os
 from datetime import timedelta
 from datetime import datetime
 
-def speak(audio):
-    # print("=====Friday not activated yet=====\n")
-    engine = pyttsx3.init("sapi5")
-    voices = engine.getProperty("voices")
-    engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
-    engine.setProperty("rate", 170)
-    print(f"Friday: {audio}") 
-    engine.say(audio)
-    engine.runAndWait()
+# def speak(audio):
+#     # print("=====Friday not activated yet=====\n")
+#     engine = pyttsx3.init("sapi5")
+#     voices = engine.getProperty("voices")
+#     engine.setProperty("voice", voices[2].id) # Make SURE this index is correct
+#     engine.setProperty("rate", 170)
+#     print(f"Friday: {audio}") 
+#     engine.say(audio)
+#     engine.runAndWait()
     
-    # VERY IMPORTANT: Stop/Quit the engine to free up the SAPI resource
-    engine.stop() 
-    del engine 
+#     # VERY IMPORTANT: Stop/Quit the engine to free up the SAPI resource
+#     engine.stop() 
+#     del engine 
+from speak import speak, stop_speaking
 
 def takeCommand():
     r = speech_recognition.Recognizer()
