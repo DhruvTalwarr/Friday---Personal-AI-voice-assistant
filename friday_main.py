@@ -26,9 +26,12 @@ from keyboard import take_screenshot
 from FocusGraph import focus_graph
 from translate import translategl
 from live_cricket_score import live_cricket_score_interactive
-# from speaker import speak
 from speak import speak, stop_speaking
-
+from VoiceTyping import voice_typing_mode
+from SwitchTab import switch_tab, switch_app, focus_app, switch_to_tab_number, close_tab, reopen_closed_tab, show_desktop, maximize_window, minimize_window
+from open_new_tab import open_new_tab
+from brightness import brightness_control
+from CleanCodeExplainerGemini import explain_code_via_gemini
 
 # setting password of friday
 for i in range(3):
@@ -169,6 +172,60 @@ if __name__ == "__main__":
                 elif "show my focus graph" in query:
                     focus_graph()
 
+                #switching tabs between browser
+                elif "next tab" in query:
+                    speak("Switching to next tab, sir.")
+                    switch_tab("next")
+
+
+                elif "previous tab" in query or "back tab" in query:
+                    speak("Switching to previous tab, sir.")
+                    switch_tab("previous")
+
+                
+                #switching between apps and windows
+                elif "switch window" in query or "next window" in query:
+                    speak("Switching to next window, sir.")
+                    switch_app()
+
+                #switching directly to a specific app
+                elif "switch to" in query:
+                    app_name = query.replace("switch to", "").strip()
+                    focus_app(app_name) 
+
+
+                #open new tab
+                elif "open new tab" in query or "new tab" in query:
+                    open_new_tab()
+
+                
+
+                elif "go to tab" in query or "switch to tab" in query:
+                    words = query.split()
+                    for word in words:
+                        if word.isdigit():
+                            tab_num = int(word)
+                            switch_to_tab_number(tab_num)
+                            break
+                    else:
+                        speak("Please say a tab number between one and nine.")
+
+                elif "close this tab" in query or "close tab" in query:
+                    # speak("Closing the current tab, sir.")
+                    close_tab()
+
+                elif "reopen closed tab" in query or "restore tab" in query:
+                    # speak("Reopening last closed tab, sir.")
+                    reopen_closed_tab()
+
+                elif "show desktop" in query or "go to desktop" in query:
+                    show_desktop()
+
+                elif "minimize window" in query or "minimize this" in query or "minimise window" in query or "minimise this" in query:
+                    minimize_window()
+
+                elif "maximize window" in query or "maximize this" in query or "maximise window" in query or "maximise this" in query:
+                    maximize_window()
 
                 # Translation
                 elif "translate" in query:
@@ -374,3 +431,55 @@ if __name__ == "__main__":
                     pyautogui.sleep(2)
                     speak("Say cheese in 3 seconds!")
                     pyautogui.press("enter")
+
+
+                #voice typing mode
+                elif "start typing" in query or "voice typing" in query:
+                    voice_typing_mode()
+
+                #brightness of system
+                elif "brightness" in query:
+                    brightness_control()
+
+
+                # --- Code Explanation ---
+                elif "explain this code" in query or "explain code" in query:
+                    speak("Sure sir, please paste the code you want me to explain.")
+                    print("Paste your code below. Type 'END' on a new line to finish:")
+
+                    # Multi-line input until user types 'END'
+                    user_code_lines = []
+                    while True:
+                        line = input()
+                        if line.strip().upper() == "END":
+                            break
+                        user_code_lines.append(line)
+                    
+                    user_code = "\n".join(user_code_lines)
+
+                    if not user_code.strip():
+                        speak("No code was provided, sir. Returning to normal mode.")
+                        continue
+
+                    # Ask for programming language
+                    speak("Which programming language is this code in, sir?")
+                    lang = input("Enter language (e.g., Python, C++, Java): ").strip()
+                    if not lang:
+                        lang = "Python"  # Default to Python if not provided
+
+                    # Call the CleanCodeExplainer
+                    explain_code_via_gemini(user_code, language=lang)
+
+
+
+        elif "exit" in query or "quit" in query:
+            speak("Ok sir, you can call me anytime.")
+
+            # Stop pyttsx3 engine cleanly
+            try:
+                engine = pyttsx3.init("sapi5")
+                engine.stop()
+                del engine
+            except:
+                pass
+            sys.exit(0)
